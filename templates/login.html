@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crime Record Management System - Login</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#1e3c72,#2a5298);
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .login-container{
+            width:420px;
+            background:white;
+            padding:40px;
+            border-radius:15px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.3);
+            text-align:center;
+        }
+
+        .icon{
+            font-size:50px;
+            margin-bottom:10px;
+        }
+
+        h2{
+            color:#1e3c72;
+            margin-bottom:25px;
+        }
+
+        input{
+            width:100%;
+            padding:12px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            margin-bottom:15px;
+            font-size:15px;
+        }
+
+        input:focus{
+            outline:none;
+            border-color:#1e3c72;
+            box-shadow:0 0 8px rgba(30,60,114,0.3);
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            border:none;
+            border-radius:8px;
+            background:#1e3c72;
+            color:white;
+            font-size:16px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        button:hover{
+            background:#16325c;
+        }
+
+        #message{
+            margin-top:15px;
+            font-weight:bold;
+            color:red;
+        }
+
+        .register-link{
+            margin-top:20px;
+        }
+
+        .register-link a{
+            color:#1e3c72;
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="login-container">
+
+    <div class="icon">🚔</div>
+
+    <h2>Crime Record Management System</h2>
+
+    <form id="loginForm">
+
+        <input type="email"
+               id="email"
+               placeholder="Enter Email"
+               required>
+
+        <input type="password"
+               id="password"
+               placeholder="Enter Password"
+               required>
+
+        <button type="submit">
+            Login
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+    <div class="register-link">
+        Don't have an account?
+        <a href="/register-page">Register Here</a>
+    </div>
+
+</div>
+
+<script>
+
+document.getElementById("loginForm")
+.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const response = await fetch("/login",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            email:document.getElementById("email").value,
+            password:document.getElementById("password").value
+        })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("message").innerHTML = data.message;
+
+    if(response.ok){
+
+        if(data.role === "admin"){
+            window.location.href="/admin-dashboard";
+        }
+
+        else if(data.role === "police"){
+            window.location.href="/police-dashboard";
+        }
+    }
+
+});
+
+</script>
+
+</body>
+</html>
